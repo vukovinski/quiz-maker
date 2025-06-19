@@ -1,17 +1,15 @@
 ﻿using Asp.Versioning;
-using Microsoft.AspNetCore.Mvc;
-
 using QuizMaker.Models;
 using QuizMaker.Shared;
 using QuizMaker.Api.Handlers;
-
+using Microsoft.AspNetCore.Mvc;
 
 namespace QuizMaker.Api.Controllers
 {
     [ApiController]
     [ApiVersion("1.0")]
     [Route("api/v{version:apiVersion}/[controller]")]
-    public class QuizController : ControllerBase
+    public class QuizController : BaseController
     {
         private readonly QuizMakerDbContext _dbContext;
         private readonly ILogger<QuizController> _logger;
@@ -28,7 +26,7 @@ namespace QuizMaker.Api.Controllers
         [HttpPost("Create")]
         public IActionResult CreateQuiz(ApiVersion apiVersion, [FromBody] CreateQuizRequest request)
         {
-            return TryRunRequestHandler(() =>
+            return TryRunRequestHandler(_logger, () =>
             {
                 var result = _createQuizHandler.Activate().Run(_dbContext, request);
                 if (result > 0) return CreatedAtAction(nameof(GetQuiz), new { apiVersion = apiVersion.ToString(), quizId = result }, new { Id = result });
@@ -39,7 +37,7 @@ namespace QuizMaker.Api.Controllers
         [HttpPost]
         public IActionResult GetQuizzes(ApiVersion apiVersion, [FromBody] GetQuizzesRequest request)
         {
-            return TryRunRequestHandler(() =>
+            return TryRunRequestHandler(_logger, () =>
             {
                 return Ok(_getQuizzesHandler.Activate().Run(_dbContext, request));
             });
@@ -48,25 +46,12 @@ namespace QuizMaker.Api.Controllers
         [HttpGet("{quizId}")]
         public IActionResult GetQuiz(ApiVersion apiVersion, int quizId)
         {
-            return TryRunRequestHandler(() =>
+            return TryRunRequestHandler(_logger, () =>
             {
                 var result = _getQuizHandler.Activate().Run(_dbContext, quizId);
                 if (result != null) return Ok(result);
                 else return NotFound();
             });
-        }
-
-        private IActionResult TryRunRequestHandler(Func<IActionResult> handler)
-        {
-            try
-            {
-                return handler();
-            }
-            catch (Exception e)
-            {
-                _logger.LogError("An error occured while processing the request. Error: {errorMessage}", e.Message);
-                return StatusCode(StatusCodes.Status500InternalServerError);
-            }
         }
     }
 }

@@ -9,7 +9,7 @@ namespace QuizMaker.Api.Controllers
     [ApiController]
     [ApiVersion("1.0")]
     [Route("api/v{version:apiVersion}/[controller]")]
-    public class QuestionsController : ControllerBase
+    public class QuestionsController : BaseController
     {
         private readonly QuizMakerDbContext _dbContext;
         private readonly ILogger<QuestionsController> _logger;
@@ -25,35 +25,29 @@ namespace QuizMaker.Api.Controllers
         [HttpGet("Search")]
         public async Task<IActionResult> SearchQuestions(ApiVersion apiVersion, [FromQuery] string searchText)
         {
-            if (string.IsNullOrWhiteSpace(searchText))
+            return await TryRunRequestHandler(_logger, async () =>
             {
-                return BadRequest("Search text cannot be empty.");
-            }
-            try
-            {
+                if (string.IsNullOrWhiteSpace(searchText))
+                {
+                    return BadRequest("Search text cannot be empty.");
+                }
                 var questions = await _searchQuestionsHandler.Activate().Run(_dbContext, searchText);
                 return Ok(questions);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error occurred while searching for questions.");
-                return StatusCode(StatusCodes.Status500InternalServerError, "Internal server error. Please try again later.");
-            }
+            });
         }
 
         [HttpPost]
         public async Task<IActionResult> GetQuestions(ApiVersion apiVersion, [FromBody] GetQuestionsRequest request)
         {
-            try
+            return await TryRunRequestHandler(_logger, async () =>
             {
+                if (request.Page <= 0 || request.PageSize <= 0)
+                {
+                    return BadRequest("Page and PageSize must be greater than zero.");
+                }
                 var questions = await _getQuestionsHandler.Activate().Run(_dbContext, request);
                 return Ok(questions);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error occurred while retrieving questions.");
-                return StatusCode(StatusCodes.Status500InternalServerError, "Internal server error. Please try again later.");
-            }
+            });
         }
     }
 }
