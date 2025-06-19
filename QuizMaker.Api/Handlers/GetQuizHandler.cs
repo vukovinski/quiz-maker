@@ -5,9 +5,9 @@ namespace QuizMaker.Api.Handlers
 {
     public class GetQuizHandler
     {
-        public GetQuizDto? Run(QuizMakerDbContext dbContext, int quizId)
+        public async Task<GetQuizDto?> Run(QuizMakerDbContext dbContext, int quizId)
         {
-            var quiz = dbContext.Quizzes.Include(q => q.QuizQuestions).ThenInclude(qq => qq.Question).AsNoTracking().FirstOrDefault(q => q.Id == quizId);
+            var quiz = await dbContext.Quizzes.Include(q => q.QuizQuestions).ThenInclude(qq => qq.Question).AsNoTracking().FirstOrDefaultAsync(q => q.Id == quizId);
             if (quiz == null) return null;
             return new GetQuizDto
             {

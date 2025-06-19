@@ -4,7 +4,7 @@ namespace QuizMaker.Api.Handlers
 {
     public class CreateQuizHandler
     {
-        public int Run(QuizMakerDbContext dbContext, CreateQuizRequest request)
+        public async Task<int> Run(QuizMakerDbContext dbContext, CreateQuizRequest request)
         {
             if (request.ValidRequest())
             {
@@ -37,7 +37,7 @@ namespace QuizMaker.Api.Handlers
                         });
                     }
                 }
-                dbContext.SaveChanges();
+                await dbContext.SaveChangesAsync();
                 return quiz.Id;
             }
             else return -1;

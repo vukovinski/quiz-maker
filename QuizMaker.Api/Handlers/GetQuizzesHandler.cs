@@ -5,9 +5,9 @@ namespace QuizMaker.Api.Handlers
 {
     public class GetQuizzesHandler
     {
-        public List<GetQuizzesDto> Run(QuizMakerDbContext dbContext, GetQuizzesRequest request)
+        public async Task<List<GetQuizzesDto>> Run(QuizMakerDbContext dbContext, GetQuizzesRequest request)
         {
-            var queryable = dbContext.Quizzes.Include(q => q.QuizQuestions).AsNoTracking().AsQueryable();
+            var queryable = dbContext.Quizzes.Include(q => q.QuizQuestions).AsNoTracking();
 
             if (request.SortField == GetQuizzesRequest.QuizSortField.Title)
             {
@@ -22,7 +22,7 @@ namespace QuizMaker.Api.Handlers
                     : queryable.OrderByDescending(q => q.CreatedAt);
             }
 
-            return queryable
+            return await queryable
                 .Skip((request.Page - 1) * request.PageSize)
                 .Take(request.PageSize)
                 .Select(q => new GetQuizzesDto
@@ -32,7 +32,7 @@ namespace QuizMaker.Api.Handlers
                     CreatedDate = q.CreatedAt.UtcDateTime,
                     QuestionCount = q.QuizQuestions.Count
                 })
-                .ToList();
+                .ToListAsync();
         }
     }
 

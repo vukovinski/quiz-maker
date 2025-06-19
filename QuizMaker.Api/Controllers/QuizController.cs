@@ -24,31 +24,31 @@ namespace QuizMaker.Api.Controllers
         }
 
         [HttpPost("Create")]
-        public IActionResult CreateQuiz(ApiVersion apiVersion, [FromBody] CreateQuizRequest request)
+        public async Task<IActionResult> CreateQuiz(ApiVersion apiVersion, [FromBody] CreateQuizRequest request)
         {
-            return TryRunRequestHandler(_logger, () =>
+            return await TryRunRequestHandler(_logger, async () =>
             {
-                var result = _createQuizHandler.Activate().Run(_dbContext, request);
+                var result = await _createQuizHandler.Activate().Run(_dbContext, request);
                 if (result > 0) return CreatedAtAction(nameof(GetQuiz), new { apiVersion = apiVersion.ToString(), quizId = result }, new { Id = result });
                 else return BadRequest("Invalid request data. Please check the input and try again.");
             });
         }
 
         [HttpPost]
-        public IActionResult GetQuizzes(ApiVersion apiVersion, [FromBody] GetQuizzesRequest request)
+        public async Task<IActionResult> GetQuizzes(ApiVersion apiVersion, [FromBody] GetQuizzesRequest request)
         {
-            return TryRunRequestHandler(_logger, () =>
+            return await TryRunRequestHandler(_logger, async () =>
             {
-                return Ok(_getQuizzesHandler.Activate().Run(_dbContext, request));
+                return Ok(await _getQuizzesHandler.Activate().Run(_dbContext, request));
             });
         }
 
         [HttpGet("{quizId}")]
-        public IActionResult GetQuiz(ApiVersion apiVersion, int quizId)
+        public async Task<IActionResult> GetQuiz(ApiVersion apiVersion, int quizId)
         {
-            return TryRunRequestHandler(_logger, () =>
+            return await TryRunRequestHandler(_logger, async () =>
             {
-                var result = _getQuizHandler.Activate().Run(_dbContext, quizId);
+                var result = await _getQuizHandler.Activate().Run(_dbContext, quizId);
                 if (result != null) return Ok(result);
                 else return NotFound();
             });
