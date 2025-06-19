@@ -14,8 +14,10 @@ namespace QuizMaker.Api.Controllers
         private readonly QuizMakerDbContext _dbContext;
         private readonly ILogger<QuizController> _logger;
         private readonly Lazy<GetQuizHandler> _getQuizHandler = new();
+        private readonly Lazy<EditQuizHandler> _editQuizHandler = new();
         private readonly Lazy<GetQuizzesHandler> _getQuizzesHandler = new();
         private readonly Lazy<CreateQuizHandler> _createQuizHandler = new();
+        private readonly Lazy<DeleteQuizHandler> _deleteQuizHandler = new();
 
         public QuizController(ILogger<QuizController> logger, QuizMakerDbContext dbContext)
         {
@@ -28,9 +30,21 @@ namespace QuizMaker.Api.Controllers
         {
             return await TryRunRequestHandler(_logger, async () =>
             {
+                if (request == null) return BadRequest("Request cannot be null.");
                 var result = await _createQuizHandler.Activate().Run(_dbContext, request);
                 if (result > 0) return CreatedAtAction(nameof(GetQuiz), new { apiVersion = apiVersion.ToString(), quizId = result }, new { Id = result });
                 else return BadRequest("Invalid request data. Please check the input and try again.");
+            });
+        }
+
+        [HttpPost("Edit")]
+        public async Task<IActionResult> EditQuiz(ApiVersion apiVersion, [FromBody] EditQuizRequest request)
+        {
+            return await TryRunRequestHandler(_logger, async () =>
+            {
+                if (request == null) return BadRequest("Request cannot be null.");
+                await _editQuizHandler.Activate().Run(_dbContext, request);
+                return Ok();
             });
         }
 
@@ -39,6 +53,7 @@ namespace QuizMaker.Api.Controllers
         {
             return await TryRunRequestHandler(_logger, async () =>
             {
+                if (request == null) return BadRequest("Request cannot be null.");
                 return Ok(await _getQuizzesHandler.Activate().Run(_dbContext, request));
             });
         }
@@ -50,6 +65,17 @@ namespace QuizMaker.Api.Controllers
             {
                 var result = await _getQuizHandler.Activate().Run(_dbContext, quizId);
                 if (result != null) return Ok(result);
+                else return NotFound();
+            });
+        }
+
+        [HttpDelete("{quizId}")]
+        public async Task<IActionResult> DeleteQuiz(ApiVersion apiVersion, int quizId)
+        {
+            return await TryRunRequestHandler(_logger, async () =>
+            {
+                var result = await _deleteQuizHandler.Activate().Run(_dbContext, quizId);
+                if (result) return NoContent();
                 else return NotFound();
             });
         }
