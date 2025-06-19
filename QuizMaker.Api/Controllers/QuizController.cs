@@ -1,7 +1,5 @@
 ﻿using Asp.Versioning;
-
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Http;
 
 using QuizMaker.Models;
 using QuizMaker.Shared;
@@ -27,7 +25,7 @@ namespace QuizMaker.Api.Controllers
             _dbContext = dbContext;
         }
 
-        [HttpPost("create")]
+        [HttpPost("Create")]
         public IActionResult CreateQuiz(ApiVersion apiVersion, [FromBody] CreateQuizRequest request)
         {
             return TryRunRequestHandler(() =>

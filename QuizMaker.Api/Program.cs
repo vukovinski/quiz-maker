@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddOpenApi();
+builder.Services.AddControllers();
 builder.Services.AddApiVersioning().AddMvc();
 builder.Services.AddDbContext<QuizMakerDbContext>(options =>
 {
