@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using QuizMaker.Models;
@@ -11,9 +12,11 @@ using QuizMaker.Models;
 namespace QuizMaker.Models.Migrations
 {
     [DbContext(typeof(QuizMakerDbContext))]
-    partial class QuizMakerDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250619095320_Quiz_CreatedAt")]
+    partial class Quiz_CreatedAt
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
