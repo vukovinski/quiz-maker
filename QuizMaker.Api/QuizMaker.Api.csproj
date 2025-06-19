@@ -11,10 +11,12 @@
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.6" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.6" />
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.0.4" />
+    <PackageReference Include="System.Composition.TypedParts" Version="7.0.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\QuizMaker.Models\QuizMaker.Models.csproj" />
+    <ProjectReference Include="..\QuizMaker.Plugins.Contract\QuizMaker.Plugins.Contract.csproj" />
     <ProjectReference Include="..\QuizMaker.Shared\QuizMaker.Shared.csproj" />
   </ItemGroup>
 

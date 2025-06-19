@@ -9,6 +9,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuizMaker.Models", "QuizMak
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuizMaker.Shared", "QuizMaker.Shared\QuizMaker.Shared.csproj", "{FA30F830-B7D8-4019-82BE-EA5CC3BC6B1E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuizMaker.Plugins.Contract", "QuizMaker.Plugins.Contract\QuizMaker.Plugins.Contract.csproj", "{E6806363-2233-4A4D-AF57-80394A0A131D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuizMaker.Plugins.CsvExporter", "QuizMaker.Plugins.CsvExporter\QuizMaker.Plugins.CsvExporter.csproj", "{2A8432E6-9C13-4884-8954-E7CCC8FF156D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -55,6 +59,30 @@ Global
 		{FA30F830-B7D8-4019-82BE-EA5CC3BC6B1E}.Release|x64.Build.0 = Release|Any CPU
 		{FA30F830-B7D8-4019-82BE-EA5CC3BC6B1E}.Release|x86.ActiveCfg = Release|Any CPU
 		{FA30F830-B7D8-4019-82BE-EA5CC3BC6B1E}.Release|x86.Build.0 = Release|Any CPU
+		{E6806363-2233-4A4D-AF57-80394A0A131D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E6806363-2233-4A4D-AF57-80394A0A131D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E6806363-2233-4A4D-AF57-80394A0A131D}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{E6806363-2233-4A4D-AF57-80394A0A131D}.Debug|x64.Build.0 = Debug|Any CPU
+		{E6806363-2233-4A4D-AF57-80394A0A131D}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{E6806363-2233-4A4D-AF57-80394A0A131D}.Debug|x86.Build.0 = Debug|Any CPU
+		{E6806363-2233-4A4D-AF57-80394A0A131D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E6806363-2233-4A4D-AF57-80394A0A131D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E6806363-2233-4A4D-AF57-80394A0A131D}.Release|x64.ActiveCfg = Release|Any CPU
+		{E6806363-2233-4A4D-AF57-80394A0A131D}.Release|x64.Build.0 = Release|Any CPU
+		{E6806363-2233-4A4D-AF57-80394A0A131D}.Release|x86.ActiveCfg = Release|Any CPU
+		{E6806363-2233-4A4D-AF57-80394A0A131D}.Release|x86.Build.0 = Release|Any CPU
+		{2A8432E6-9C13-4884-8954-E7CCC8FF156D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2A8432E6-9C13-4884-8954-E7CCC8FF156D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2A8432E6-9C13-4884-8954-E7CCC8FF156D}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{2A8432E6-9C13-4884-8954-E7CCC8FF156D}.Debug|x64.Build.0 = Debug|Any CPU
+		{2A8432E6-9C13-4884-8954-E7CCC8FF156D}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{2A8432E6-9C13-4884-8954-E7CCC8FF156D}.Debug|x86.Build.0 = Debug|Any CPU
+		{2A8432E6-9C13-4884-8954-E7CCC8FF156D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2A8432E6-9C13-4884-8954-E7CCC8FF156D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2A8432E6-9C13-4884-8954-E7CCC8FF156D}.Release|x64.ActiveCfg = Release|Any CPU
+		{2A8432E6-9C13-4884-8954-E7CCC8FF156D}.Release|x64.Build.0 = Release|Any CPU
+		{2A8432E6-9C13-4884-8954-E7CCC8FF156D}.Release|x86.ActiveCfg = Release|Any CPU
+		{2A8432E6-9C13-4884-8954-E7CCC8FF156D}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

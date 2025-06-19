@@ -1,8 +1,12 @@
 ﻿using Asp.Versioning;
 using QuizMaker.Models;
 using QuizMaker.Shared;
+using System.Reflection;
 using QuizMaker.Api.Handlers;
 using Microsoft.AspNetCore.Mvc;
+using System.Composition.Hosting;
+using QuizMaker.Plugins.Contract;
+using Microsoft.EntityFrameworkCore;
 
 namespace QuizMaker.Api.Controllers
 {
@@ -78,6 +82,64 @@ namespace QuizMaker.Api.Controllers
                 if (result) return NoContent();
                 else return NotFound();
             });
+        }
+
+        [HttpGet("GetExporters")]
+        public IActionResult GetExporters(ApiVersion apiVersion)
+        {
+            var pluginPath = Path.Combine(AppContext.BaseDirectory, "Plugins");
+            var assemblies = Directory
+                .GetFiles(pluginPath, "*.dll")
+                .Select(Assembly.LoadFrom)
+                .ToList();
+
+            var config = new ContainerConfiguration().WithAssemblies(assemblies);
+
+            using (var container = config.CreateContainer())
+            {
+                var discoveredPluginNames = new List<string>();
+                var plugins = container.GetExports<IExporterPlugin>();
+
+                foreach (var plugin in plugins)
+                {
+                    discoveredPluginNames.Add(plugin.Name);
+                }
+                return Ok(new { Exporters = discoveredPluginNames });
+            }
+        }
+
+        [HttpGet("Export/{quizId}")]
+        public async Task<IActionResult> Export(ApiVersion apiVersion, [FromQuery] string exporterName, int quizId)
+        {
+            var pluginPath = Path.Combine(AppContext.BaseDirectory, "Plugins");
+            var assemblies = Directory
+                .GetFiles(pluginPath, "*.dll")
+                .Select(Assembly.LoadFrom)
+                .ToList();
+
+            var config = new ContainerConfiguration().WithAssemblies(assemblies);
+
+            using (var container = config.CreateContainer())
+            {
+                var plugins = container.GetExports<IExporterPlugin>();
+
+                foreach (var plugin in plugins)
+                {
+                    if (plugin.Name.Equals(exporterName, StringComparison.OrdinalIgnoreCase))
+                    {
+                        var quiz = await _dbContext.Quizzes.FindAsync(quizId);
+                        if (quiz == null) return NotFound("Quiz not found.");
+                        var quizQuestions = await _dbContext.QuizQuestions.Where(qq => qq.QuizId == quizId)
+                            .Include(qq => qq.Question)
+                            .OrderBy(qq => qq.OrdinalNumber)
+                            .ToListAsync();
+                        var quizQuestionsForExport = quizQuestions.Select(qq => (qq.Question.QuestionText, qq.Question.AnswerText)).ToList();
+                        var exportData = plugin.Export(quiz.Title, quizQuestionsForExport);
+                        return File(exportData.Content, exportData.MimeType, exportData.FileName);
+                    }
+                }
+            }
+            return BadRequest("Exporter not found. Please check the exporter name and try again.");
         }
     }
 }
