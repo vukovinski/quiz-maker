@@ -30,6 +30,8 @@ namespace QuizMaker.Api.Controllers
         }
 
         [HttpPost("Create")]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> CreateQuiz(ApiVersion apiVersion, [FromBody] CreateQuizRequest request)
         {
             return await TryRunRequestHandler(_logger, async () =>
@@ -42,6 +44,8 @@ namespace QuizMaker.Api.Controllers
         }
 
         [HttpPost("Edit")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> EditQuiz(ApiVersion apiVersion, [FromBody] EditQuizRequest request)
         {
             return await TryRunRequestHandler(_logger, async () =>
@@ -53,6 +57,8 @@ namespace QuizMaker.Api.Controllers
         }
 
         [HttpPost]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> GetQuizzes(ApiVersion apiVersion, [FromBody] GetQuizzesRequest request)
         {
             return await TryRunRequestHandler(_logger, async () =>
@@ -63,6 +69,8 @@ namespace QuizMaker.Api.Controllers
         }
 
         [HttpGet("{quizId}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetQuiz(ApiVersion apiVersion, int quizId)
         {
             return await TryRunRequestHandler(_logger, async () =>
@@ -74,6 +82,8 @@ namespace QuizMaker.Api.Controllers
         }
 
         [HttpDelete("{quizId}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> DeleteQuiz(ApiVersion apiVersion, int quizId)
         {
             return await TryRunRequestHandler(_logger, async () =>
@@ -85,6 +95,7 @@ namespace QuizMaker.Api.Controllers
         }
 
         [HttpGet("GetExporters")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         public IActionResult GetExporters(ApiVersion apiVersion)
         {
             var pluginPath = Path.Combine(AppContext.BaseDirectory, "Plugins");
@@ -109,6 +120,7 @@ namespace QuizMaker.Api.Controllers
         }
 
         [HttpGet("Export/{quizId}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> Export(ApiVersion apiVersion, [FromQuery] string exporterName, int quizId)
         {
             var pluginPath = Path.Combine(AppContext.BaseDirectory, "Plugins");

@@ -23,6 +23,7 @@ namespace QuizMaker.Api.Controllers
         }
 
         [HttpGet("Search")]
+        [ProducesResponseType(typeof(List<QuestionDto>), StatusCodes.Status200OK)]
         public async Task<IActionResult> SearchQuestions(ApiVersion apiVersion, [FromQuery] string searchText)
         {
             return await TryRunRequestHandler(_logger, async () =>
@@ -37,6 +38,7 @@ namespace QuizMaker.Api.Controllers
         }
 
         [HttpPost]
+        [ProducesResponseType(typeof(List<QuestionDto>), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetQuestions(ApiVersion apiVersion, [FromBody] GetQuestionsRequest request)
         {
             return await TryRunRequestHandler(_logger, async () =>
