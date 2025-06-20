@@ -121,6 +121,7 @@ namespace QuizMaker.Api.Controllers
 
         [HttpGet("Export/{quizId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Export(ApiVersion apiVersion, [FromQuery] string exporterName, int quizId)
         {
             var pluginPath = Path.Combine(AppContext.BaseDirectory, "Plugins");
