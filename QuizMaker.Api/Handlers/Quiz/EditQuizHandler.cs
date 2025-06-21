@@ -34,6 +34,7 @@ namespace QuizMaker.Api.Handlers
                         var existingRelation = quiz.QuizQuestions.FirstOrDefault(q => q.QuestionId == questionDto.QuestionId);
                         if (existingRelation == null)
                             quiz.QuizQuestions.Add(new QuizQuestion { Quiz = quiz, Question = existingQuestion, OrdinalNumber = i + 1 });
+                        else existingRelation.OrdinalNumber = i + 1;
                     }
                 }
                 await dbContext.SaveChangesAsync();
