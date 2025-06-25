@@ -1,3 +1,4 @@
+using QuizMaker;
 using QuizMaker.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -19,6 +20,7 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi();
 }
 
+app.UseMiddleware<ApiKeyMiddleware>();
 app.UseHttpsRedirection();
 app.MapControllers();
 app.Run();
