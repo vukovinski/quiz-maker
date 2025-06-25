@@ -16,7 +16,7 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    // http://localhost:5000/openapi/v1.json
+    // http://localhost:5137/openapi/v1.json
     app.MapOpenApi();
 }
 
