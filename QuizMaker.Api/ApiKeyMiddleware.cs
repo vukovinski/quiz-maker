@@ -12,19 +12,22 @@
 
         public async Task InvokeAsync(HttpContext context, IConfiguration configuration)
         {
-            if (!context.Request.Headers.TryGetValue(API_KEY_HEADER_NAME, out var extractedApiKey))
+            if (context.Request.Path != "/openapi/v1.json")
             {
-                context.Response.StatusCode = 401;
-                await context.Response.WriteAsync("API Key was not provided.");
-                return;
-            }
+                if (!context.Request.Headers.TryGetValue(API_KEY_HEADER_NAME, out var extractedApiKey))
+                {
+                    context.Response.StatusCode = 401;
+                    await context.Response.WriteAsync("API Key was not provided.");
+                    return;
+                }
 
-            var apiKey = configuration.GetValue<string>("ApiKey")!;
-            if (!apiKey.Equals(extractedApiKey))
-            {
-                context.Response.StatusCode = 403;
-                await context.Response.WriteAsync("Unauthorized client.");
-                return;
+                var apiKey = configuration.GetValue<string>("ApiKey")!;
+                if (!apiKey.Equals(extractedApiKey))
+                {
+                    context.Response.StatusCode = 403;
+                    await context.Response.WriteAsync("Unauthorized client.");
+                    return;
+                }
             }
 
             await _next(context);
