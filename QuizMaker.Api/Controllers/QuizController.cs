@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc;
 using System.Composition.Hosting;
 using QuizMaker.Plugins.Contract;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Mvc.Routing;
+using System.Net;
 
 namespace QuizMaker.Api.Controllers
 {
@@ -124,6 +126,7 @@ namespace QuizMaker.Api.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Export(ApiVersion apiVersion, [FromQuery] string exporterName, int quizId)
         {
+            exporterName = WebUtility.UrlDecode(exporterName);
             var pluginPath = Path.Combine(AppContext.BaseDirectory, "Plugins");
             var assemblies = Directory
                 .GetFiles(pluginPath, "*.dll")
