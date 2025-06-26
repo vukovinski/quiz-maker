@@ -1,4 +1,5 @@
-﻿using Asp.Versioning;
+﻿using System.Net;
+using Asp.Versioning;
 using QuizMaker.Shared;
 using QuizMaker.Models;
 using QuizMaker.Api.Handlers;
@@ -32,6 +33,7 @@ namespace QuizMaker.Api.Controllers
                 {
                     return BadRequest("Search text cannot be empty.");
                 }
+                searchText = WebUtility.UrlDecode(searchText);
                 var questions = await _searchQuestionsHandler.Activate().Run(_dbContext, searchText);
                 return Ok(questions);
             });
