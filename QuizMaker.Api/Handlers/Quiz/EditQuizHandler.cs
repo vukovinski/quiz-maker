@@ -31,7 +31,7 @@ namespace QuizMaker.Api.Handlers
                         var existingQuestion = await dbContext.Questions.FindAsync(questionDto.QuestionId);
                         if (existingQuestion == null)
                             throw new KeyNotFoundException($"Question with Id {questionDto.QuestionId} not found.");
-                        var existingRelation = quiz.QuizQuestions.FirstOrDefault(q => q.QuestionId == questionDto.QuestionId);
+                        var existingRelation = quiz.QuizQuestions.FirstOrDefault(q => q.QuestionId == questionDto.QuestionId && q.QuizId == quiz.Id);
                         if (existingRelation == null)
                             quiz.QuizQuestions.Add(new QuizQuestion { Quiz = quiz, Question = existingQuestion, OrdinalNumber = i + 1 });
                         else existingRelation.OrdinalNumber = i + 1;

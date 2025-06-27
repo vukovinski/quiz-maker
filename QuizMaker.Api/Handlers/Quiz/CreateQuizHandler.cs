@@ -16,14 +16,16 @@ namespace QuizMaker.Api.Handlers
                     var question = request.Questions[i];
                     if (question.ValidNewQuestion())
                     {
+                        var newQuestion = new Question
+                        {
+                            QuestionText = question.QuestionText!,
+                            AnswerText = question.AnswerText!
+                        };
+                        dbContext.Questions.Add(newQuestion);
                         quiz.QuizQuestions.Add(new QuizQuestion
                         {
                             Quiz = quiz,
-                            Question = new Question
-                            {
-                                QuestionText = question.QuestionText!,
-                                AnswerText = question.AnswerText!
-                            },
+                            Question = newQuestion,
                             OrdinalNumber = i + 1
                         });
                     }
